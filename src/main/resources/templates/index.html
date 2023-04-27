@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <h1>Expense Management Application</h1>
+    <hr />
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Id</th>
+            <th>Month Of Reimbursement</th>
+            <th>Date Of Claim</th>
+            <th>Claimed Amount</th>
+            <th>Approved Amount</th>
+<!--            <th>Paid Amount</th>-->
+            <th>Payment Date</th>
+            <th>Status</th>
+            <th>Claim Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${todoItems}" th:class="${item.isComplete} ? 'alert alert-success' : 'alert alert-warning'">
+            <td>
+                <div class="btn btn-group-sm" role="group">
+                    <a class="btn btn-success" th:href="@{/edit/{id}(id=${item.id})}">
+                        <i class="bi bi-pencil-fill"></i> Pay</a>
+                    <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">
+                        <i class="bi bi-trash-fill"></i> Delete</a>
+
+                </div>
+            </td>
+            <td th:text="${item.id}"></td>
+            <td>
+                <span th:each="month : ${T(java.time.Month).values()}"
+                th:text="${item.getClaimMonthAsObject().equals(month) ? month.getDisplayName(T(java.time.format.TextStyle).FULL, T(java.util.Locale).ENGLISH) : ''}" />
+            </td>
+            <td th:text="${#temporals.format(item.createdAt, 'dd/MM/yy')}"></td>
+            <td th:text="${item.description}"></td>
+            <td th:text="${item.approvedAmount}"></td>
+            <td th:text="${#temporals.format(item.updatedAt, 'dd/MM/yy')}"></td>
+            <td>
+                <span th:if="${item.isComplete} == true" th:text="Paid" />
+                <span th:unless="${item.isComplete} == true" th:text="Unpaid" />
+            </td>
+
+
+            <td th:text="${item.claimType}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <p><a class="btn btn-outline-success" href="/create-todo">
+        <i class="bi bi-plus-square-fill"></i> Submit an Expense</a>
+    </p>
+</div>
+<script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
+</body>
+</html>
