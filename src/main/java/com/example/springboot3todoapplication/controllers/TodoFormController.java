@@ -35,7 +35,7 @@ public class TodoFormController {
 
         TodoItem item = new TodoItem();
        item.setDescription(todoItem.getDescription());
-       // item.setApprovedAmount(todoItem.getDescription());
+       //item.setApprovedAmount(todoItem.getDescription());
         item.setClaimMonth(todoItem.getClaimMonth());
         item.setClaimYear(todoItem.getClaimYear());
         item.setClaimType(todoItem.getClaimType());
@@ -69,28 +69,12 @@ public class TodoFormController {
     @PostMapping("/todo/{id}")
     public String updateTodoItem(@PathVariable("id") Long id, @Valid TodoItem todoItem, BindingResult result, Model model) {
 
-
         TodoItem item= todoItemService
                 .getById(id)
                 .orElseThrow(() -> new IllegalArgumentException("TodoItem id: " + id + " not found"));
 
-       try{
-           if(result.hasErrors()){
-               throw new IllegalArgumentException("Error!");
-           }
-           String approvedAmount = todoItem.getApprovedAmount();
-           if (approvedAmount == null || approvedAmount.isEmpty()) {
-            throw new IllegalArgumentException("Approved amount cannot be null or empty.");
-        }
-        item.setApprovedAmount(approvedAmount);
-    } catch (IllegalArgumentException ex) {
-        model.addAttribute("error", ex.getMessage());
-        return "edit-todo-item";
-    }
-
-
+        item.setApprovedAmount(todoItem.getApprovedAmount());
         item.setIsComplete(todoItem.getIsComplete());
-
 
       /*  if (Integer.parseInt(todoItem.getApprovedAmount()) > Integer.parseInt( todoItem.getDescription())){
             model.addAttribute("error2", "Approved amount cannot be greater than claimed amount!");
@@ -102,9 +86,7 @@ public class TodoFormController {
         //item.setApprovedAmount(todoItem.getApprovedAmount());
         //System.out.println("approved amount-------------------------------->"+item.getApprovedAmount());
 
-
         todoItemService.save(item);
-
         return "redirect:/";
     }
 }

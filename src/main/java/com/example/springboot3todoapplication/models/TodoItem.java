@@ -28,7 +28,8 @@ public class TodoItem implements Serializable {
 
     //@NotBlank(message = "Approved Amount is required")
     @Digits(integer = 10, fraction = 2, message = "Expense must be a number with up to 2 decimal places")
-    private String approvedAmount;
+    @Min(value = 0, message = "Amount must be greater than Zero")
+    private BigDecimal approvedAmount;
 
 
     private Boolean isComplete;
